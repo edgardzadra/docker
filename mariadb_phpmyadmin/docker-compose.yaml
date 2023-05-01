@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  maria_vol:
+
+networks:
+  maria_net:
+    driver: bridge
+
+services:
+  maria_db:
+    image: mariadb:10.7.8
+    environment:
+      MYSQL_ROOT_PASSWORD: mariapwd
+      MYSQL_USER:  user 
+      MYSQL_PASSWORD: password
+    ports:
+      - 40000:3306
+    networks:
+      - maria_net
+    volumes:
+      - maria_vol:/data/app
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: maria_db
+      PMA_PORT: 3306
+    networks:
+      - maria_net
