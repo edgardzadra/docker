@@ -1,0 +1,33 @@
+version: '3'
+
+networks:
+  postgres_net:
+    driver: bridge
+
+volumes:
+  postgres_vol:
+
+services:
+  postgres_db:
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 15432:5432
+    networks:
+      - postgres_net
+    volumes:
+      - postgres_vol:/data/app
+
+  pgadmin:
+    image: dpage/pgadmin4:7.0
+    environment:
+     PGADMIN_DEFAULT_EMAIL: user@domain.com
+     PGADMIN_DEFAULT_PASSWORD: password
+    depends_on:
+      - postgres_db
+    ports:
+      - 8080:80
+    networks:
+      - postgres_net
