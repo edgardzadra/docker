@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+  redis_net:
+    driver: bridge
+
+volumes:
+  redis_vol:
+
+services:
+  redis_db:
+    image: redis:6.0
+    volumes:
+      - redis_vol:/data/app
+    networks:
+      - redis_net
+
+  redis_commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      REDIS_HOSTS: local:redis_db:6379
+    ports:
+      - 8081:8081
+    networks:
+      - redis_net
